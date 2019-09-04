@@ -1,4 +1,4 @@
-.PHONY=logistic run
+.PHONY=logistic run fucking-around
 
 all:
 	exit 0
@@ -16,6 +16,12 @@ multi-descent:
 
 run: logistic
 	./dist/logistic
+
+
+fucking-around:
+	mkdir -p dist
+	ghc fucking-around -odir dist/ -hidir dist/ -o dist/fucking-around
+	./dist/fucking-around
 
 
 clean:
