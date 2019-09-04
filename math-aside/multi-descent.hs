@@ -61,11 +61,13 @@ descend f x0 n = x1
 
 norm xs = sqrt (sum [x^2 | x <- xs])
 
+-- Probably return a local minimum for a vector value function of n-variables
+-- NOTE: This can be considerably optimized
 gradDescent f x0 n = val
   where
     f' = (grad f n)
-    a  = -0.00005
-    x1 = (add x0 (scale (f' x0) a))
+    a  = 0.00005
+    x1 = (add x0 (scale (f' x0) (-a)))
     val = if norm (f' x1) < 0.0001
              then x1
              else (gradDescent f x1 n)
