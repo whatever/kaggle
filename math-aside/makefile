@@ -11,7 +11,7 @@ logistic:
 multi-descent:
 	mkdir -p dist
 	ghc -O src/multi-descent.hs -odir dist/ -hidir dist/ -o dist/multi-descent
-	time ./dist/multi-descent
+	./dist/multi-descent
 
 
 fucking-around:
