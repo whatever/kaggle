@@ -10,8 +10,8 @@ logistic:
 
 multi-descent:
 	mkdir -p dist
-	ghc multi-descent -odir dist/ -hidir dist/ -o dist/multi-descent
-	./dist/multi-descent
+	ghc -O multi-descent -odir dist/ -hidir dist/ -o dist/multi-descent
+	time ./dist/multi-descent
 
 
 run: logistic

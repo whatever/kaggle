@@ -1,3 +1,9 @@
+-- Multivariate Gradient Descent
+-- -----------------------------
+-- Experimenting with writing Haskell for something that I used to know but
+-- completely forget.
+
+
 -- Add to vectors
 add :: [Double] -> [Double] -> [Double]
 add xs ys = [x+y | (x, y) <- (zip xs ys)]
@@ -52,23 +58,41 @@ descend f x0 n = x1
 
 -- Probably return a local minimum for a vector value function of n-variables
 -- NOTE: This can be considerably optimized
-gradDescent :: ([Double] -> Double) -> [Double] -> Int -> [Double]
-gradDescent f x0 n = val
+gradDescentOld :: ([Double] -> Double) -> [Double] -> Int -> [Double]
+gradDescentOld f x0 n = val
   where
     f' = (grad f n)
     a  = 0.00005
     x1 = (add x0 (scale (f' x0) (-a)))
     val = if norm (f' x1) < 0.0001
              then x1
-             else (gradDescent f x1 n)
+             else (gradDescentOld f x1 n)
+
+-- Return a near-local minimum for a vector-valued real function
+-- Probably return a local minimum for a vector value function of n-variables
+-- NOTE: This can be considerably optimized
+gradDescent :: ([Double] -> Double) -> [Double] -> Int -> [Double]
+gradDescent f x0 n =
+  (descend x0)
+  where f' = (grad f n)
+        a  = 0.00005
+        h  = 0.0001
+        iterate x = (add x (scale (f' x) (-a)))
+        descend x =
+          if (norm (f' x)) < h
+             then x
+             else (descend (iterate x))
 
 
 -- some multivariate function
 f2 :: [Double] -> Double
-f2 [x, y, z] = (x-3)^2 + y^2 + z^2 + 8
+f2 [x, y, z] = (x-3)^2 + (y+2)^2 + (z-9)^2 + 8
 
 
 -- lfg
 main = do
   print "Multivariate Gradient Descent"
-  print (gradDescent f2 [3, 10, -1] 3)
+  -- print (gradDescent f2 [3, 10, -1] 3)
+  print "Find the local minimum of (x-3)^2 + y^2 + z^2 + 8"
+  print "Equals ="
+  print (gradDescent f2 [30000, -1000212, -1687878] 3)
