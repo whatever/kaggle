@@ -4,6 +4,12 @@
 -- completely forget.
 
 
+-- ...
+import System.IO (isEOF)
+import Control.Monad (forever, when)
+import System.Exit (exitSuccess)
+
+
 -- Add to vectors
 add :: [Double] -> [Double] -> [Double]
 add xs ys = [x+y | (x, y) <- (zip xs ys)]
@@ -89,10 +95,45 @@ f2 :: [Double] -> Double
 f2 [x, y, z] = (x-3)^2 + (y+2)^2 + (z-9)^2 + 8
 
 
+-- Load in a csv files as a matrix
+loadCsvAsMatrix :: [Char] -> [[Double]]
+loadCsvAsMatrix fileName = [[1]]
+
+
+-- readMatrix will return a matrix of doubles from STDIN
+readMatrix content =
+  let ls = lines content
+  in [[1.0]]
+
+
+
+annoyingSeq str = [remainder | remainder <- (dropWhile (/= ' ') str)]
+
+
+-- Ugly csv line parser that we use just because we wanted to roll our own
+split :: String -> [String]
+split "" = []
+split str = [piece] ++ (split remaining)
+  -- TODO: figure out the values for piece/rest simultaneously
+  where piece = (takeWhile (/= ',') str)
+        rest = (dropWhile (/= ',') str)
+        remaining = if null rest then "" else (tail rest)
+
+
+
 -- lfg
 main = do
   print "Multivariate Gradient Descent"
+
   -- print (gradDescent f2 [3, 10, -1] 3)
-  print "Find the local minimum of (x-3)^2 + y^2 + z^2 + 8"
-  print "Equals ="
-  print (gradDescent f2 [30000, -1000212, -1687878] 3)
+  -- print "Find the local minimum of (x-3)^2 + y^2 + z^2 + 8"
+  -- print "Equals ="
+  -- print (gradDescent f2 [30000, -1000212, -1687878] 3)
+
+
+  -- contents <- getContents
+  line <- getLine
+  print (split line)
+
+  line <- getLine
+  print (split line)

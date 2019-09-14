@@ -11,7 +11,7 @@ logistic:
 multi-descent:
 	mkdir -p dist
 	ghc -O src/multi-descent.hs -odir dist/ -hidir dist/ -o dist/multi-descent
-	./dist/multi-descent
+	cat ../digital-recognizah/data/train.csv | head -n10 | ./dist/multi-descent 
 
 
 fucking-around:
