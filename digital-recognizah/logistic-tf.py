@@ -69,18 +69,20 @@ if __name__ == "__main__":
 
     for i in range(steps_number):
         input_batch, labels_batch = mnist.train.next_batch(batch_size)
-        print("<<<")
-        print(labels_batch)
-        print(">>>")
         feeder = {
             x: input_batch,
             y_actual: labels_batch,
         }
         train.run(feed_dict=feeder)
 
+    print(sess.run(loss, feed_dict={
+        x: mnist.test.images,
+        y_actual: mnist.test.labels,
+    }))
+
     test_accuracy = accuracy.eval(feed_dict={
         x: mnist.test.images,
         y_actual: mnist.test.labels,
     })
 
-    print(test_accuracy)
+    print("TF #1 Accuracy =", test_accuracy)

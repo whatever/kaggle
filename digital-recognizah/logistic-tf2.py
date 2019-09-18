@@ -51,3 +51,36 @@ if __name__ == "__main__":
 
     sess = tf.InteractiveSession()
     sess.run(tf.global_variables_initializer())
+    sess.as_default()
+
+
+    # ITerate
+
+    steps_number = 5000
+    batch_size = 100
+
+
+    yyyy = sess.run(tf.one_hot(mnist_data.iloc[:, 0], 10, dtype=tf.float32))
+
+    for i in range(1000):
+        s = 100*(i+0)
+        e = 100*(i+1)
+        input_batch = mnist_data.iloc[s:e, 1:]
+        labels_batch = sess.run(tf.one_hot(mnist_data.iloc[s:e, 0], 10, dtype=tf.float32))
+
+        feeder = {
+            x: input_batch,
+            y_actual: labels_batch,
+        }
+        train.run(feed_dict=feeder, session=sess)
+    print(sess.run(loss, feed_dict={
+        x: mnist_data.iloc[:, 1:],
+        y_actual: yyyy,
+    }))
+
+    test_accuracy = accuracy.eval(feed_dict={
+        x: mnist_data.iloc[:, 1:],
+        y_actual: yyyy,
+    })
+
+    print("TF #2 Accuracy =", test_accuracy)
