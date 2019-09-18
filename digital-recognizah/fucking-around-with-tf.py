@@ -50,6 +50,25 @@ if __name__ == "__main__":
     print(res)
 
 
+    # Ex. 6
+
+    data = [
+        [0, 1,],
+        [1, 1,],
+        [2, 1,],
+        [3, 1,],
+        [0, 1,],
+    ]
+
+    slices = tf.data.Dataset.from_tensor_slices(data)
+    next_item = slices.make_one_shot_iterator().get_next()
+
+    print(">>>", sess.run(next_item))
+    print(">>>", sess.run(next_item))
+    print(">>>", sess.run(next_item))
+
+
+
     # Fin?
     writer = tf.compat.v1.summary.FileWriter('.')
     writer.add_graph(tf.compat.v1.get_default_graph())
