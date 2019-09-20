@@ -108,4 +108,3 @@ if __name__ == "__main__":
         )
 
         logging.warning("Total accuracy = %f", accuracy_results)
-        assert False, "For some reason cost is going up with every iteration!!!"
