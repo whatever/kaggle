@@ -7,7 +7,9 @@ from __future__ import print_function
 
 
 import argparse
+import csv
 import logging
+import sys
 
 
 import numpy as np
@@ -108,3 +110,22 @@ if __name__ == "__main__":
         )
 
         logging.warning("Total accuracy = %f", accuracy_results)
+
+        # Generate submission
+        test_df = pd.read_csv(args.test)
+
+        predictions = sess.run(tf.math.argmax(y_predicted, 1), feed_dict={x: test_df})
+
+        with sys.stdout:
+            writer = csv.DictWriter(sys.stdout, fieldnames=["ImageId", "Label"])
+            writer.writeheader()
+            for i, p in enumerate(predictions):
+                writer.writerow({
+                    "ImageId": i+1,
+                    "Label": p,
+                })
+
+    # Generate summary
+    writer = tf.compat.v1.summary.FileWriter('events')
+    writer.add_graph(tf.compat.v1.get_default_graph())
+    writer.flush()
