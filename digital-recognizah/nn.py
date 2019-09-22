@@ -9,12 +9,19 @@ from __future__ import print_function
 import argparse
 import csv
 import logging
+import os
+import random
 import sys
 
 
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+
+
+import PIL.Image as pil
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 
 if __name__ == "__main__":
@@ -24,6 +31,7 @@ if __name__ == "__main__":
     parser.add_argument("--iterations", type=int, default=10)
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--learning-rate", type=float, default=0.5)
+    parser.add_argument("--demo", action="store_true")
     args = parser.parse_args()
 
     # Logging setup
@@ -114,18 +122,30 @@ if __name__ == "__main__":
         # Generate submission
         test_df = pd.read_csv(args.test)
 
-        predictions = sess.run(tf.math.argmax(y_predicted, 1), feed_dict={x: test_df})
+        if args.demo:
+            predictions = sess.run(
+                tf.argmax(y_predicted, 1),
+                feed_dict={x: test_df},
+            )
 
-        with sys.stdout:
-            writer = csv.DictWriter(sys.stdout, fieldnames=["ImageId", "Label"])
-            writer.writeheader()
-            for i, p in enumerate(predictions):
-                writer.writerow({
-                    "ImageId": i+1,
-                    "Label": p,
-                })
 
-    # Generate summary
-    writer = tf.compat.v1.summary.FileWriter('events')
-    writer.add_graph(tf.compat.v1.get_default_graph())
-    writer.flush()
+            c = "yes"
+
+            fig, axs = plt.subplots(3, 3)
+
+            while c == "yes" or c == "y" or c == "":
+                for i in range(9):
+                    k = random.randint(0, len(predictions)-1)
+                    x = i % 3
+                    y = i // 3
+                    f = axs[x, y].imshow(np.array(test_df.iloc[k, :]).reshape(28, 28))
+                    axs[x, y].get_xaxis().set_visible(False)
+                    axs[x, y].get_yaxis().set_visible(False)
+                    # axs[x, y].set_title("Prediction = {}".format(predictions[k]))
+                    for txt in axs[x, y].texts:
+                        txt.set_visible(False)
+                    axs[x, y].text(0.5, -0.15, "Pred = {}".format(predictions[k]), ha="center", transform=axs[x, y].transAxes)
+
+                fig.show()
+
+                c = raw_input("Display more images (Y/n)? ").lower()
