@@ -131,20 +131,20 @@ if __name__ == "__main__":
 
             c = "yes"
 
-            fig, axs = plt.subplots(3, 3)
+            fig, axs = plt.subplots(5, 5)
 
             while c == "yes" or c == "y" or c == "":
-                for i in range(9):
+                for i in range(5*5):
                     k = random.randint(0, len(predictions)-1)
-                    x = i % 3
-                    y = i // 3
+                    x = i % 5
+                    y = i // 5
                     f = axs[x, y].imshow(np.array(test_df.iloc[k, :]).reshape(28, 28))
                     axs[x, y].get_xaxis().set_visible(False)
                     axs[x, y].get_yaxis().set_visible(False)
                     # axs[x, y].set_title("Prediction = {}".format(predictions[k]))
                     for txt in axs[x, y].texts:
                         txt.set_visible(False)
-                    axs[x, y].text(-4.5, 2.2, "{}".format(predictions[k]))
+                    axs[x, y].text(-5.5, 4.2, "{}".format(predictions[k]))
 
                 fig.show()
 
