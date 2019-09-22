@@ -144,7 +144,7 @@ if __name__ == "__main__":
                     # axs[x, y].set_title("Prediction = {}".format(predictions[k]))
                     for txt in axs[x, y].texts:
                         txt.set_visible(False)
-                    axs[x, y].text(0.5, -0.15, "Pred = {}".format(predictions[k]), ha="center", transform=axs[x, y].transAxes)
+                    axs[x, y].text(-4.5, 2.2, "{}".format(predictions[k]))
 
                 fig.show()
 
