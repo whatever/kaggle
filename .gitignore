@@ -1,0 +1,6 @@
+*.hi
+*.swp
+*.o
+dist
+data
+events.out.*
